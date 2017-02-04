@@ -1,0 +1,2 @@
+graft rpi_robot/templates
+graft rpi_robot/static

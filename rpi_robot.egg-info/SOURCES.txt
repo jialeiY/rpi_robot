@@ -1,0 +1,8 @@
+MANIFEST.in
+rpi_robot/__init__.py
+rpi_robot/rpi_robot.py
+rpi_robot.egg-info/PKG-INFO
+rpi_robot.egg-info/SOURCES.txt
+rpi_robot.egg-info/dependency_links.txt
+rpi_robot.egg-info/requires.txt
+rpi_robot.egg-info/top_level.txt
