@@ -3,8 +3,8 @@ import time
 from flask import Flask,request,session,g,redirect,url_for,abort,\
 	render_template,flash,Response
 from camera_rpi import Camera
+import threading
 from functools import wraps
-import subprocess
 
 
 app=Flask(__name__)
@@ -20,31 +20,28 @@ app.config.update(dict(
 def login_required(f):
     @wraps(f)
     def decorated_function(*args,**kwargs):
-   
-        if not session.get('logged_in'):
-            return redirect(url_for('login',next=request.url))
-        return f(*args,**kwargs)
-    return decorated_function
+        if g.user is None:
+            return redirect(url_for(welcome))
+
 
 
 @app.route('/')
 def welcome():
-    return render_template('welcome.html')
+    return render_template('log.html')
 
 
-@app.route('/control',methods=['GET','POST'])
 @login_required
+@app.route('/control',methods=['GET','POST'])
 def control():
     
     if request.method=="POST":
         if request.form.get('start_video'):        
-            
-            #subprocess.Popen(['ffserver','-f','/etc/ffserver.conf'])
-            subprocess.Popen(['/usr/sbin/webcam.sh'],shell=True)
+            VIDEO_START=1
+ 
         elif request.form.get('stop_video'):
-               
-             subprocess.call(['sudo','pkill','ffserver'])
-  
+        
+             VIDEO_START=0
+        
     return render_template('control.html')
 
 @app.route('/<pin>',methods=['POST'])
