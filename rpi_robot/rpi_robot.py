@@ -1,3 +1,5 @@
+
+
 import os
 import time
 from flask import Flask,request,session,g,redirect,url_for,abort,\
@@ -5,7 +7,7 @@ from flask import Flask,request,session,g,redirect,url_for,abort,\
 from camera_rpi import Camera
 from functools import wraps
 import subprocess
-
+import motor
 
 app=Flask(__name__)
 app.config.from_object(__name__)
@@ -31,12 +33,44 @@ def login_required(f):
 def welcome():
     return render_template('welcome.html')
 
+@app.route('/control/cam',methods=['POST'])
+@login_required
+def move_cam():
+    motor_cam=motor.ControlCameraMotors()
+    move=request.form.get('move')
+    if move=='forward':
+        motor_cam.forward()
+    elif move=="backward":
+        motor_cam.backward()
+    else:
+        return 'error'
+    return 'success'
+
+@app.route('/control/mv',methods=['POST'])
+@login_required
+def move_robot():
+    motor_mv=motor.ControlMoveMotors()
+    move=request.form.get('move')
+    print move
+    if move=='left':
+        motor_mv.turn_left()
+    elif move=='right':
+        motor_mv.turn_right()
+    elif move=='forward':
+        motor_mv.forward()
+    elif move=='backward':
+        motor_mv.backward()
+    else:
+        return 'error'
+    return 'success'        
 
 @app.route('/control',methods=['GET','POST'])
 @login_required
 def control():
-    
     if request.method=="POST":
+        
+        print 1111,request
+        print 2222,request.form
         if request.form.get('start_video'):        
             
             #subprocess.Popen(['ffserver','-f','/etc/ffserver.conf'])
@@ -44,37 +78,7 @@ def control():
         elif request.form.get('stop_video'):
                
              subprocess.call(['sudo','pkill','ffserver'])
-  
     return render_template('control.html')
-
-@app.route('/<pin>',methods=['POST'])
-def reroute(pin):
-    print 7777777,pin
-    return redirect(url_for('control'))
-
-def gen_thread(camera):
-    print 66666
-    global VIDEO_START
-    print 99999,VIDEO_START
-    while VIDEO_START:
-        #print 1
-        frame=camera.get_frame()
-  
-        yield(b'--frame\n'
-               b'Content-Type: image\n\n'+frame+b'\n')
-   
-def gen(camera):
-    print 3333
-    thread=threading.Thread(target=gen_thread,args=(camera,))
-    print thread
-    thread.start()
-    print 2,thread
-
-@app.route('/video_feed')
-def video_feed():
-   
-    return Response(gen_thread(Camera()),
-            mimetype='multipart/x-mixed-replace;boundary=frame')
 
 
 @app.route('/login',methods=['GET','POST'])
@@ -95,3 +99,7 @@ def logout():
 	session.pop('logged_in',None)
 	flash('You were logged out')
 	return redirect(url_for('login'))
+
+
+if __name__=='__main__':
+    app.run(host='0.0.0.0',debug=1)

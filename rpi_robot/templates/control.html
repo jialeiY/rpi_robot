@@ -1,17 +1,35 @@
 <!doctype html>
 <title>raspberry pi robot</title>
+<head>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+        </script>
+    <link rel="stylesheet" type="text/css" 
+        href="{{ url_for('static' ,filename='styles.css')}}"
+</head>
 <body>
 <div id='video'>
    
-    <img src="http://192.168.1.110:8090/test.mjpeg">   
+    <img src="http://192.168.1.110:8090/test.mjpeg" alt="video stopped" 
+        width="320px" height="240px">   
+
+    <input type="image" src="/static/img/forward.png" id="cam_backward">
+    <input type="image" src="/static/img/backward.png" id="cam_forward">
    
    <form action="{{ url_for('control') }}" method=post id="video_control">
-     <input type="submit" name="start_video" value="start video">
-     <input type="submit" name="stop_video" value="stop video">
+     <input type="submit" class="video_button" id="start_v" name="start_video" value="start video" >
+     <input type="submit" class="video_button" id="stop_v" name="stop_video" value="stop video">
     </form>
-    
-    <form action="/1" method="POST">
-        <input type="submit" name="11" value="11">
-    </form>
+ </div> 
+<div id='move'>  
+   
+        <input type="image" src="/static/img/left.png" id="mv_left">
+        <input type="image" src="/static/img/forward.png" id="mv_forward">
+        <input type="image" src="/static/img/right.png" id="mv_right">
+        <input type="image" src="/static/img/backward.png" id="mv_backward">
+
+ 
 </div>
+
+<script src="{{ url_for('static', filename='control.js') }}"></script>
+
 </body>
