@@ -7,17 +7,23 @@
         href="{{ url_for('static' ,filename='styles.css')}}"
 </head>
 <body>
+    <p><input type="submit" class='big_button' value="reboot" id="reboot_id">
+            </p>
 <div id='video'>
    
-    <img src="http://192.168.1.110:8090/test.mjpeg" alt="video stopped" 
+    <img src="http://192.168.1.111:8090/test.mjpeg" alt="video stopped" 
         width="320px" height="240px">   
 
+  <div id='cam_move'>
     <input type="image" src="/static/img/forward.png" id="cam_backward">
     <input type="image" src="/static/img/backward.png" id="cam_forward">
-   
+  </div>
+ 
    <form action="{{ url_for('control') }}" method=post id="video_control">
-     <input type="submit" class="video_button" id="start_v" name="start_video" value="start video" >
-     <input type="submit" class="video_button" id="stop_v" name="stop_video" value="stop video">
+     <input type="submit" class="big_button" id="start_v" 
+                name="start_video" value="start video" >
+     <input type="submit" class="big_button" id="stop_v" 
+                name="stop_video" value="stop video">
     </form>
  </div> 
 <div id='move'>  
@@ -25,10 +31,33 @@
         <input type="image" src="/static/img/left.png" id="mv_left">
         <input type="image" src="/static/img/forward.png" id="mv_forward">
         <input type="image" src="/static/img/right.png" id="mv_right">
-        <input type="image" src="/static/img/backward.png" id="mv_backward">
-
- 
+        <input type="image" src="/static/img/backward.png" id="mv_backward"> 
 </div>
+
+<div id='led'>
+    <div id="led_text">
+
+       display text:<br> <input type="text" id="led_text_id">    
+       <input type="submit" class='big_button' id="led_text_button_id">
+     
+    </div>
+    <div id="led_temp">
+       display image:</br>
+        <textarea id="led_temp_text_id" cols=16 rows=8 >{{ led_template }}</textarea>
+        <input type="submit" class='big_button' id="led_temp_button_id">
+     </div>
+
+    <div id="led_emoji">
+        {% for img in emoji %}
+            <input type="image" class="emojiClass" src={{ img }} id="{{ img[18:] }}">
+        {% endfor %}
+    </div>
+
+
+     <input type="submit" id="led_stop_id" class='big_button' value="stop led">
+</div>
+
+
 
 <script src="{{ url_for('static', filename='control.js') }}"></script>
 

@@ -1,7 +1,35 @@
+#reboot_id{
+    width: 80px;
+    margin:auto;
+    margin-left: calc(40% - 40px);
+}
+
 #video {
-    
-    width: 350px;
+    position: relative;       
+    width: 380px;
     margin: auto;
+}
+
+#led {
+    width: 380px;
+    margin: auto;
+}
+
+#led_emoji {
+    width: 380px;
+}
+
+#led_temp_text_id {
+    width :150px;
+    height :150px;
+}
+
+#cam_move {
+    position: absolute;
+    width: 50px;
+    height: 105px;
+    top: 60px;
+    right: 0;
 }
 
 #video input[type="image"]{
@@ -24,8 +52,9 @@
 #mv_backward {
     margin-left: 100px;
 }
-.video_button{
+.big_button{
     height: 50px;
+    font-size: 16px;
 }
 
 #stop_v {
